@@ -10,4 +10,6 @@ fn main() {
 }
 
 #[cfg(not(windows))]
-fn main() {}
+fn main() {
+    println!("cargo:rustc-link-arg=-nostartfiles");
+}

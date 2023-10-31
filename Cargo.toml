@@ -46,6 +46,8 @@ members = [
 ]
 
 [dependencies]
+# Eyra: Enable, and enable the "todo" feature, which enables several stubs.
+std = { package = "eyra", version = "0.16", features = ["todo"] }
 nu-cli = { path = "./crates/nu-cli", version = "0.85.1" }
 nu-color-config = { path = "./crates/nu-color-config", version = "0.85.1" }
 nu-cmd-base = { path = "./crates/nu-cmd-base", version = "0.85.1" }
@@ -112,7 +114,10 @@ plugin = [
 	"nu-protocol/plugin",
 	"nu-engine/plugin",
 ]
-default = ["plugin", "which-support", "trash-support", "sqlite", "mimalloc"]
+# Eyra: disable "mimalloc"; it calls `snprintf` within `malloc` and we can't deal with that currently.
+# Eyra: enable "static-link-openssl"; so we don't try to dynamically link it
+#default = ["plugin", "which-support", "trash-support", "sqlite", "mimalloc"]
+default = ["plugin", "which-support", "trash-support", "sqlite", "static-link-openssl"]
 stable = ["default"]
 wasi = ["nu-cmd-lang/wasi"]
 # NOTE: individual features are also passed to `nu-cmd-lang` that uses them to generate the feature matrix in the `version` command
@@ -166,6 +171,7 @@ bench = false
 [patch.crates-io]
 reedline = { git = "https://github.com/nushell/reedline.git", branch = "main"}
 # nu-ansi-term = {git = "https://github.com/nushell/nu-ansi-term.git", branch = "main"}
+rustix = { git = "https://github.com/bytecodealliance/rustix", branch = "sunfishcode/tcpgrp" } # for the tcsetgrp fix
 
 # Criterion benchmarking setup
 # Run all benchmarks with `cargo bench`
